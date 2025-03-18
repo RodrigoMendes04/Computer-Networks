@@ -1,0 +1,45 @@
+1.
+    a)O telnet é um utilitário baseado num protocolo que permite a comunicação de texto bidireccional e
+    interactiva através de uma consola virtual, concebido para acesso remoto a uma shell.  Funciona por
+    cima do TCP.  Por razões de segurança, foi substituído pelo ssh.
+
+    b) 1. Telnet estabelece uma conexão TCP com o servidor na porta especificada.
+       2. Ele envia e recebe dados em formato texto puro (sem criptografia), permitindo interação direta
+       3. com o protocolo de aplicação.
+       4. O cliente envia comandos que o servidor interpreta, e o servidor retorna respostas de acordo
+       com o protocolo usado.
+       5. A comunicação é mantida até que a conexão seja encerrada pelo cliente ou pelo servidor.
+
+    d)
+    Conexões persistentes:
+    No HTTP/1.1, as conexões são mantidas abertas por padrão após um pedido, permitindo que múltiplos
+    pedidos sejam enviados e respondidos na mesma conexão TCP. Isso reduz o overhead de estabelecer e
+    encerrar conexões para cada pedido.
+
+    Pipelining:
+    Permite que múltiplos pedidos sejam enviados em sequência, sem esperar pela resposta do servidor a
+    cada um. Isso melhora o desempenho, pois o cliente pode enviar novos pedidos enquanto aguarda respostas.
+
+2.
+    a) Atraso total sem proxy: n*(2RTT+d_trans)
+       Atraso total com proxy: RTT + n*(RTT+d_trans)
+       Poupança(sem proxy - com proxy): (n-1)RTT
+       NOTA: RTT=2d_prop
+
+    b) RTT_BP entre o browser e o proxy, RTT_PS entre o proxy e o servidor
+       RTT_PS será semelhante ao RTT da alínea anterior
+       Assumindo que a capacidade entre o browser e o proxy não é inferior à capacidade entre
+       o proxy e o servidor:
+       Atraso total: 2*n*RTT_BP + (n+1)*RTT_PS + n*d_trans
+       Se RTT_BP << RTT_PS (e.g., está na rede local), há uma poupança ligeiramente menor do que no
+       caso anterior
+       Se RTT ≈ RTT_PS, demora ainda mais do que sem proxy
+
+       NOTA:
+       RTT_BP: Round-trip time entre o browser e o proxy.
+       RTT_PS: Round-trip time entre o proxy e o servidor.
+
+    c) Neste caso poderia tirar-se partido do pipelining
+       Atraso total: 2*RTT + n*d_trans
+       Poupança: (2n-2)*RTT
+       (Com o browser a falar HTTP 1.1, com ou sem proxy na máquina local é o mesmo)

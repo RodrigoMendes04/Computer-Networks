@@ -1,0 +1,12 @@
+1.
+    d) 1. Conexões concorrentes:
+       O servidor aceita uma conexão por vez no loop principal.
+       Quando uma instância do cliente conecta ao servidor, o servidor começa a interagir exclusivamente com esse cliente.
+       Enquanto a interação com o cliente atual não termina (até o cliente encerrar ou o socket fechar), outros clientes que tentarem se conectar ficarão aguardando.
+
+       2. Segunda conexão fica pendente:
+       Quando a segunda instância do cliente tenta se conectar ao servidor enquanto ele está ocupado com o primeiro cliente, ela permanece em estado de espera. Isso ocorre porque o servidor só atende a uma conexão por vez.
+
+       3. Após a primeira conexão terminar:
+       O servidor fecha o socket atual e volta a aceitar novas conexões.
+       A segunda instância do cliente então é conectada e começa a interagir com o servidor.

@@ -1,0 +1,70 @@
+1.
+    a) Pacotes Duplicados: O receptor envia confirmações duplicadas (ack do pkt1, dup), o que
+    pode confundir o emissor.
+
+       Pacotes Perdidos: A retransmissão de pacotes devido a timeouts e a potencial perda de pacotes
+       (indicada pelo ack do pkt2 em vermelho).
+
+    b)
+    Tamanho do pacote: 1500bytes = 1500×8 bits = 12000 bits
+    Taxa de transmissão: 10 Mbps = 10×10^6 bits/s
+    t_trans: 12000 bits / 10×10^6 bits/s = 1.2 ms
+    Tempo de propagação (t_prop): 20 ms
+    Tempo total de ida e volta (RTT): 2×t_prop = 2×20 ms = 40 ms
+    Eficiência do protocolo Stop-and-Wait: 1.2 / (1.2 + 40) = 0.0294 = 2.94%
+
+2.
+    a) No pior caso, a janela do emissor e a do receptor estão completamente desfasadas, mas
+    são contíguas.  Se todos os segmentos nessas janelas tiverem números de sequência
+    diferentes (i.e., o espaço de números de sequência for pelo menos o dobro do tamanho da janela),
+    não é possível o emissor enviar um segmento e ele ser interpretado no receptor como outro mais à
+    frente (com o mesmo número de sequência).
+
+    b) Ver soluções
+
+3.
+    a) Funções: multiplexagem/desmultiplexagem, detecção de erros (checksum), fiabilidade,
+    controlo de fluxo, controlo de congestionamento.  O UDP só tem as duas primeiras; o TCP tem todas.
+
+    b) No UDP, o endereço IP de destino e a porta de destino.  No TCP, os endereços IP de origem e
+    destino e as portas de origem e destino (socket associada a conexão, que é identificada pelas
+    duas "pontas").
+
+4.
+    a) Distância do cabo (L): 5000 km = 5,000,000 metros
+    Velocidade da luz na fibra (v): 2 x 10^8 metros por segundo
+    Tempo de propagação (t_prop): L / v = 5,000,000 / 2 x 10^8 = 0.025 segundos = 25 ms
+    Tamanho do bloco (S): 1000 bytes = 8000 bits
+    Taxa de transmissão (R): 2 Gbps = 2 x 10^9 bits por segundo
+    Tempo de transmissão (t_trans): S / R = 8000 / 2 x 10^9 = 4 x 10^-6 segundos
+    RTT: 2 x t_prop = 2 x 25 ms= 50 ms = 0.05 segundos
+    Número de blocos na janela de transmissão(W): RTT / t_trans = (0.05 / 4 x 10^-6) + 1 = 12501 blocos
+
+    b) Se não houver perdas, não, porque já há transmissão contínua.  Se puderem ocorrer perdas, sim,
+    porque recuperar de uma perda demora no mínimo um tempo igual ao RTT (e há que encher esse outro
+    RTT com transmissões).
+
+5.
+    a) Olhando para o formato do cabeçalho UDP, as portas de origem e destino são campos de 16 bits
+    logo no início do segmento.  Como os dados estão em Network Order (big endian), a porta de
+    origem é 19050 (0100101001101010) e a de destino 56104 (1101101100101000).
+    Tamanho: 0000000000010000 = 16 bytes
+
+    b)
+    01001010 01101010   (19050)
+    11011011 00101000   (56104)
+    00000000 00010000   (16)
+    00000000 00000000   (0) -> checksum inicial (placeholder)
+    10100010 10101010   (42650)
+    10000001 11110101   (33269)
+    11010001 11101000   (53736)
+    10001010 10110111   (35479)
+
+      01001010 01101010
+    + 11011011 00101000
+
+
+
+
+
+

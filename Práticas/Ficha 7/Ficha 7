@@ -1,0 +1,62 @@
+1. O controlo de fluxo limita o envio quando o receptor tem um buffer pequeno.
+   O controlo de congestionamento limita o envio quando a rede está congestionada, mesmo que o
+   receptor tenha capacidade de processamento.
+
+2.
+    a) O three-way handshake é o processo utilizado pelo protocolo TCP (Transmission Control Protocol)
+    para estabelecer uma conexão fiável entre duas máquinas. Ele garante que ambas as partes estão
+    prontas para iniciar a comunicação e sincronizam os números de sequência (sequence numbers)
+    necessários para rastrear os dados transmitidos.
+
+    Objetivos do three-way handshake:
+    - Estabelecer a conexão bidirecional entre cliente e servidor.
+    - Sincronizar os números de sequência que serão usados para rastrear os segmentos de dados.
+    - Confirmar a prontidão de ambos os lados para enviar e receber dados.
+
+    b) O processo de terminação de uma conexão TCP é conhecido como four-way handshake. Ele assegura
+    que ambas as partes concordem com o encerramento da conexão e que todos os dados pendentes
+    sejam transmitidos antes do término.
+
+3.
+    a) EstimatedRTT(n)=(1−α)⋅EstimatedRTT(n−1)+α⋅SampleRTT(n)
+    Se expandirmos isso para as quatro amostras recentes (SampleRTT(4), SampleRTT(3), SampleRTT(2) e
+    SampleRTT(1)), obtemos: EstimatedRTT(4)=(1−α)^3 x SampleRTT(1)+(1−α)^2 x SampleRTT(2)+
+    +(1−α) x SampleRTT(3)+α x SampleRTT(4)
+
+    b) EstimatedRTT(n)= (i=1 ∑ n) α x (1−α)^(n−i) x SampleRTT(i)
+
+    d) α=0.1
+       𝛽=0.2
+       Valores de RTT medidos: 54, 63, 55, 57, 68, 56, 55, 58 ms.
+       EstimatedRTT(0)=54 ms
+       DevRTT(0)= 54/2=27 ms
+
+       EstimatedRTT(n)=(1−α) x EstimatedRTT(n−1)+α x SampleRTT(n)
+       EstimatedRTT(1)=(1−0.1) x 54+0.1 x 63=54.9 ms
+       EstimatedRTT(2)=(1−0.1) x 54.9+0.1 x 55=54.95 ms
+       EstimatedRTT(3)=(1−0.1) x 54.95+0.1 x 57=54.955 ms
+       EstimatedRTT(4)=(1−0.1) x 54.955+0.1 x 68=55.46 ms
+       EstimatedRTT(5)=(1−0.1) x 55.46+0.1 x 56=55.114 ms
+       EstimatedRTT(6)=(1−0.1) x 55.114+0.1 x 55=55.203 ms
+       EstimatedRTT(7)=(1−0.1) x 55.203+0.1 x 58=55.383 ms
+
+       DevRTT(n)=(1−𝛽) x DevRTT(n−1)+𝛽 x |SampleRTT(n)−EstimatedRTT(n)|
+       DevRTT(1)=(1−0.2) x 27+0.2 x |63−54.9|=23.22 ms
+       DevRTT(2)=(1−0.2) x 23.22+0.2 x |55−54.95|=23.194 ms
+       DevRTT(3)=(1−0.2) x 23.194+0.2 x |57−54.955|=23.179 ms
+       DevRTT(4)=(1−0.2) x 23.179+0.2 x |68−55.46|=24.546 ms
+       DevRTT(5)=(1−0.2) x 24.546+0.2 x |56−55.114|=24.091 ms
+       DevRTT(6)=(1−0.2) x 24.091+0.2 x |55−55.203|=24.018 ms
+       DevRTT(7)=(1−0.2) x 24.018+0.2 x |58−55.383|=24.366 ms
+
+       TimeoutInterval(n)=EstimatedRTT(n)+4 x DevRTT(n)
+       TimeoutInterval=(55.383+4 x 24.366)=55.383+97.464=152.847 ms
+       O valor do timeout é de 152.847 ms.
+
+    e) Se um pacote for retransmitido, o RTT da retransmissão não deve ser considerado, pois pode não
+    refletir o atraso real da conexão. Por isso, o TCP usa apenas o RTT de segmentos novos para atualizar
+    EstimatedRTT e DevRTT.
+
+       Motivo:
+       A retransmissão pode ser causada por um timeout, que pode ter sido disparado por eventos
+       transitórios (ex: congestionamento), afetando a precisão da estimativa.
